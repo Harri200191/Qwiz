@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>MCQ Helper Options</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 16px; max-width: 720px; }
+    label { display:block; margin-top:10px; font-weight:600; }
+    input[type="text"], input[type="password"] { width:100%; padding:8px; box-sizing:border-box; }
+    .row { display:flex; gap:8px; align-items:center; margin-top:8px; }
+  </style>
+</head>
+<body>
+  <h2>MCQ Helper — Options</h2>
+  <label>Mode</label>
+  <select id="mode">
+    <option value="remote">Remote (OpenAI style)</option>
+    <option value="local">Local server</option>
+  </select>
+
+  <label>Remote API URL</label>
+  <input id="remote_api_url" type="text" placeholder="https://api.openai.com/v1/chat/completions">
+
+  <label>Remote API Key</label>
+  <input id="remote_api_key" type="password" placeholder="sk-... (store locally)">
+
+  <label>Local Server URL</label>
+  <input id="local_server_url" type="text" placeholder="http://localhost:5000/generate">
+
+  <label>Model Name</label>
+  <input id="model" type="text" placeholder="gpt-4o-mini">
+
+  <div class="row">
+    <button id="save">Save</button>
+    <button id="clear-cache">Clear Cache</button>
+    <span id="status"></span>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>
