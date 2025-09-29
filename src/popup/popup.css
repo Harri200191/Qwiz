@@ -1,0 +1,85 @@
+/* popup.css - beautified styles for MCQ Helper extension popup */
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #f7f9fb;
+  color: #222;
+  width: 340px;
+  min-height: 320px;
+  margin: 0;
+  padding: 0 0 16px 0;
+}
+.header {
+  background: linear-gradient(90deg, #4f8cff 0%, #6ed6ff 100%);
+  color: #fff;
+  padding: 18px 20px 10px 20px;
+  border-radius: 0 0 18px 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  margin-bottom: 12px;
+}
+.header h2 {
+  margin: 0;
+  font-size: 1.3em;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+#status {
+  margin: 0 20px 10px 20px;
+  font-size: 14px;
+  color: #4f8cff;
+  min-height: 18px;
+}
+.button-row {
+  display: flex;
+  gap: 10px;
+  margin: 0 20px 16px 20px;
+}
+button {
+  flex: 1;
+  padding: 8px 0;
+  border: none;
+  border-radius: 6px;
+  background: #4f8cff;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+button:hover {
+  background: #357ae8;
+}
+#mcqContainer {
+  margin: 0 20px;
+}
+.mcq-block {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(79,140,255,0.07);
+  margin-bottom: 14px;
+  padding: 12px 14px 10px 14px;
+  border-left: 4px solid #4f8cff;
+}
+.mcq-block strong {
+  color: #357ae8;
+}
+.mcq-block .answer {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #1aaf5d;
+  margin-left: 4px;
+}
+.mcq-block .error {
+  color: #e74c3c;
+  font-weight: bold;
+  font-size: 1.1em;
+  margin-left: 4px;
+}
+.mcq-block pre {
+  background: #f3f6fa;
+  border-radius: 4px;
+  padding: 6px 8px;
+  font-size: 13px;
+  margin: 8px 0 0 0;
+  color: #444;
+  white-space: pre-wrap;
+}
