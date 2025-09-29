@@ -5,6 +5,8 @@ const DEBOUNCE_MS = 400;
 let lastDetectedHash = null;
 let debounceTimer = null;
 
+console.log('MCQ content script loaded');
+
 // Utility: compute a simple hash for question text to de-duplicate
 function simpleHash(str) {
   let h = 2166136261 >>> 0;
@@ -22,6 +24,9 @@ function findMCQsInDOM() {
   // 1) Radio groups: preferred (structured)
   const radios = Array.from(document.querySelectorAll('input[type="radio"]'));
   const grouped = {};
+
+  console.log('Found radio inputs:', radios.length);
+
   radios.forEach(r => {
     if (!r.name) return;
     if (!r.checked && r.offsetParent === null && r.getBoundingClientRect().width === 0) {
@@ -185,6 +190,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 // Main loop: detect MCQs and send new ones
 function runDetectionCycle() {
   const mcqs = findMCQsInDOM();
+
+  console.log('Detected MCQs:', mcqs);
+
   if (!mcqs || mcqs.length === 0) return;
   // send newest one(s)
   mcqs.forEach(mcq => {
@@ -204,3 +212,8 @@ observer.observe(document.body, { childList: true, subtree: true, attributes: fa
 
 // initial run
 setTimeout(() => runDetectionCycle(), 800);
+
+window.addEventListener('mcq_manual_scan', () => {
+  console.log("Manual scan event received");
+  runDetectionCycle();
+});
