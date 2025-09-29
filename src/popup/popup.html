@@ -3,22 +3,18 @@
 <head>
   <meta charset="utf-8" />
   <title>MCQ Helper</title>
-  <style>
-    body { font-family: Arial, sans-serif; width: 320px; padding: 12px; }
-    #status { margin-bottom: 8px; font-size: 13px; color: #333; }
-    button { margin-right: 6px; }
-    .mcq-block { border-top: 1px solid #eee; padding-top: 8px; margin-top: 8px; }
-    pre { white-space: pre-wrap; font-size: 13px; }
-  </style>
+  <link rel="stylesheet" href="popup.css" />
 </head>
 <body>
-  <div id="status">Listening for MCQs on the active tab…</div>
-  <div>
+  <div class="header">
+    <h2>MCQ Answer Helper</h2>
+  </div>
+  <div id="status">Ready</div>
+  <div class="button-row">
     <button id="open-options">Options</button>
     <button id="manual-scan">Manual Scan</button>
   </div>
   <div id="mcqContainer"></div>
-
   <script src="popup.js"></script>
 </body>
 </html>
