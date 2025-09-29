@@ -4,6 +4,8 @@
 
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
 
+console.log("MCQ service worker loaded");
+
 // Helper: get settings (server URL, api mode)
 async function getSettings() {
   return new Promise(resolve => {
@@ -40,8 +42,9 @@ async function writeCache(key, value) {
 
 // Query the configured model endpoint
 async function queryModel(mcq) {
+  console.log('[queryModel] called with MCQ:', mcq);
   const settings = await getSettings();
-
+  console.log('[queryModel] settings:', settings);
   // Build a prompt that's compact and instructive
   const prompt = [
     `You are an assistant specialized in answering multiple-choice questions.`,
@@ -51,11 +54,11 @@ async function queryModel(mcq) {
     `Task: Select the best answer (single letter) and a short explanation (one sentence).`,
     `Format: {"choice":"<LETTER>","explanation":"<one sentence>","text":"<full answer text>"}` // json parseable
   ].join('\n');
-
+  console.log('[queryModel] prompt:', prompt);
   try {
     if (settings.mode === 'local') {
-      // Local server mode: expects a POST { prompt } response JSON { text: "..."}
       const url = settings.local_server_url;
+      console.log('[queryModel] Fetching local server:', url);
       const response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -63,16 +66,19 @@ async function queryModel(mcq) {
         },
         body: JSON.stringify({ prompt, model: settings.model })
       });
+      if (!response.ok) {
+        throw new Error(`Local server error: ${response.status} ${response.statusText}`);
+      }
       const data = await response.json();
-      // Assume a textual result
+      console.log('[queryModel] Local server response:', data);
       return parseModelText(data.text || data.output || JSON.stringify(data));
     } else {
-      // Remote mode (OpenAI-like). Use settings.remote_api_url and settings.remote_api_key
       const apiKey = settings.remote_api_key;
       if (!apiKey) {
+        console.warn('[queryModel] No API key configured');
         return { choice: null, text: 'No API key configured (open options to set it).' };
       }
-      // POST in OpenAI chat completion style
+      console.log('[queryModel] Fetching remote API:', settings.remote_api_url);
       const res = await fetch(settings.remote_api_url, {
         method: 'POST',
         headers: {
@@ -86,8 +92,11 @@ async function queryModel(mcq) {
           temperature: 0
         })
       });
+      if (!res.ok) {
+        throw new Error(`Remote API error: ${res.status} ${res.statusText}`);
+      }
       const json = await res.json();
-      // extract text
+      console.log('[queryModel] Remote API response:', json);
       let text = '';
       if (json.choices && json.choices[0]) {
         if (json.choices[0].message) text = json.choices[0].message.content;
@@ -96,7 +105,7 @@ async function queryModel(mcq) {
       return parseModelText(text || JSON.stringify(json));
     }
   } catch (err) {
-    console.error('model query failed', err);
+    console.error('[queryModel] model query failed', err);
     return { choice: null, text: `Error querying model: ${err.message || err}` };
   }
 }
@@ -119,26 +128,28 @@ function parseModelText(text) {
 
 // Listen for content script messages
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  console.log('[service-worker] onMessage:', message, sender);
   if (message?.type === 'mcq_detected') {
     (async () => {
       const mcq = message.mcq;
       const cacheKey = `${mcq.id}`;
       const cached = await readCache(cacheKey);
       if (cached) {
-        // send cached to the originating tab
+        console.log('[service-worker] cache hit for', cacheKey, cached);
         if (sender?.tab?.id) {
           chrome.tabs.sendMessage(sender.tab.id, { type: 'mcq_answer', mcq, answer: cached });
         }
         sendResponse({ status: 'cached' });
         return;
       }
+      console.log('[service-worker] cache miss for', cacheKey);
       // Query model
       const answer = await queryModel(mcq);
       // store in cache
       await writeCache(cacheKey, answer);
       // reply to tab
       if (sender?.tab?.id) {
-        chrome.tabs.sendMessage(sender.tab.id, { type: 'mcq_answer', mcq, answer });
+        chrome.tabs.sendMessage(sender.tab.id, { type: 'mcq_answer', mcq, answer, error: answer.text && answer.text.startsWith('Error') ? answer.text : undefined });
       }
       sendResponse({ status: 'ok' });
     })();
