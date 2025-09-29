@@ -1,0 +1,9 @@
+{
+  "name": "com.mycompany.mcqhost",
+  "description": "MCQ Helper native bridge (example)",
+  "path": "python3 /path/to/mcq-extension/native-host/host.py",
+  "type": "stdio",
+  "allowed_origins": [
+    "chrome-extension://__INSERT_YOUR_EXTENSION_ID__/"
+  ]
+}
