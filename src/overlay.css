@@ -1,0 +1,15 @@
+/* overlay.css - optional shared overlay styling if you want to move styles out of content */
+.mcq-overlay {
+  position: absolute;
+  z-index: 2147483647;
+  background: rgba(255,255,255,0.97);
+  border-radius: 8px;
+  padding: 8px 10px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  color: #111;
+}
+.mcq-overlay button.close {
+  border: none; background: transparent; cursor:pointer; font-size: 12px;
+}
