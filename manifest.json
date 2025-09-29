@@ -13,7 +13,7 @@
     "<all_urls>"
   ],
   "background": {
-    "service_worker": "src/background/service_worker.js"
+    "service_worker": "src/background/service-worker.js"
   },
   "content_scripts": [
     {
