@@ -1,4 +1,5 @@
-# MCQ Answer Helper
+# Qwiz &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  <img src="icons/icon-128.png" alt="Our Logo" width="70" height="70"/> 
+
 
 A Chrome extension that detects Multiple Choice Questions (MCQs) on any webpage and suggests answers using a configurable LLM (OpenAI or local server).
 
